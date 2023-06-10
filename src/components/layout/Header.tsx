@@ -24,7 +24,6 @@ export function Header(props: Props) {
       <Spacer />
 
       <Flex alignItems="center" gap={4}>
-        <PassportScore />
         <Web3Button icon="hide" label="Connect" />
         <ThemeSwitcher />
       </Flex>
