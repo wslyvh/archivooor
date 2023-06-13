@@ -1,15 +1,14 @@
 import { join } from 'path'
-import ffmpeg from 'fluent-ffmpeg'
-import { readFileSync, readdirSync } from 'fs'
+import { existsSync, readFileSync, readdirSync } from 'fs'
 import { uploadAsset } from 'utils/uploads'
 import { Video } from 'types'
 import dotenv from 'dotenv'
+const execSync = require('child_process').execSync
 
 dotenv.config()
 
 const start = async () => {
-  console.log('Process videos..')
-
+  console.log('Getting tasks to process..')
   const tasks = readdirSync(join(process.cwd(), 'tasks')).map((i) => {
     const file = readFileSync(join(process.cwd(), 'tasks', i), 'utf-8')
     return JSON.parse(file)
@@ -20,30 +19,16 @@ const start = async () => {
     console.log('No tasks found..')
     return
   }
-  console.log('Processing Task #', task)
-  const result = await new Promise((resolve, reject) => {
-    console.log('Processing..')
-    const path = join(process.cwd(), 'tmp', task.created + '.mp4')
-    ffmpeg(task.videoUrl)
-      .setStartTime(task.start)
-      .setDuration(task.end - task.start)
-      .output(path)
-      .on('error', (err) => reject(err))
-      .on('end', () => {
-        const obj = {
-          ...task,
-          videoUrl: path,
-        }
-        resolve(obj)
-      })
-      .on('progress', (progress) => {
-        console.log(`${progress.percent ? Math.round(progress.percent) : 0}%`)
-      })
-      .run()
-  })
 
-  if (result) {
-    const upload = await uploadAsset(result as Video)
+  console.log('Processing Task #', task)
+  const path = join(process.cwd(), 'tmp', task.created + '.mp4')
+  const result = execSync(`ffmpeg -i ${task.videoUrl} -ss ${task.start} -to ${task.end} -c:v libx264 -c:a copy ${path}`)
+
+  if (result && existsSync(path)) {
+    const upload = await uploadAsset({
+      ...task,
+      videoUrl: path,
+    } as Video)
     console.log('Completed', upload)
   }
 }
