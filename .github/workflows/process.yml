@@ -10,22 +10,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@master
-
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: 'latest'
+      - uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: yarn install
+      - run: yarn install
+      - run: yarn process
 
-      - name: Process videos
-        run: yarn process
-
-      - name: Commit updates
-        uses: EndBug/add-and-commit@v9
+      - uses: EndBug/add-and-commit@v9
         with:
           default_author: github_actions
           message: '[ignore] Process video'
