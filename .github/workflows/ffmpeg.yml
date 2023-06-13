@@ -1,0 +1,18 @@
+name: Process ffmpeg
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tasks/**.json'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 'latest'
+      - uses: FedericoCarboni/setup-ffmpeg@v2
+      - run: ffmpeg -i https://lp-playback.com/hls/f5eese9wwl88k4g8/index.m3u8 -ss 00:00:09 -to 00:00:18 -c:v libx264 -c:a copy out.mp4
