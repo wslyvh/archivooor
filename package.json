@@ -33,6 +33,7 @@
     "@web3modal/react": "^2.4.1",
     "base-64": "^1.0.0",
     "dayjs": "^1.11.7",
+    "ffmpeg-static": "^5.1.0",
     "fluent-ffmpeg": "^2.1.2",
     "framer-motion": "^8.0.2",
     "iron-session": "^6.3.1",
