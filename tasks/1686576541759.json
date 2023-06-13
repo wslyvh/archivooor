@@ -1,1 +1,7 @@
-{"title":"Video title","description":"Video description","start":10,"end":30,"videoUrl":"https://docs.evostream.com/sample_content/assets/bun33s.mp4"}
+{
+  "name": "Video title",
+  "description": "Video description",
+  "start": 10,
+  "end": 30,
+  "videoUrl": "https://docs.evostream.com/sample_content/assets/bun33s.mp4"
+}
