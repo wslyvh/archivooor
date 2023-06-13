@@ -12,20 +12,15 @@ const start = async () => {
 
   const tasks = readdirSync(join(process.cwd(), 'tasks')).map((i) => {
     const file = readFileSync(join(process.cwd(), 'tasks', i), 'utf-8')
-    const data = JSON.parse(file)
-    return {
-      ...data,
-      created: Number(i.replace('.json', '')),
-    }
+    return JSON.parse(file)
   })
 
-  console.log('TASKS', tasks)
-  const task = tasks[0]
+  const task = tasks[tasks.length - 1]
   if (!task) {
     console.log('No tasks found..')
     return
   }
-
+  console.log('Processing Task #', task)
   const result = await new Promise((resolve, reject) => {
     console.log('Processing..')
     const path = join(process.cwd(), 'tmp', task.created + '.mp4')
