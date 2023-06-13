@@ -1,4 +1,5 @@
 import { join } from 'path'
+import ffmpeg from 'fluent-ffmpeg'
 import { existsSync, readFileSync, readdirSync } from 'fs'
 import { uploadAsset } from 'utils/uploads'
 import { Video } from 'types'
@@ -22,7 +23,31 @@ const start = async () => {
 
   console.log('Processing Task #', task)
   const path = join(process.cwd(), 'tmp', task.created + '.mp4')
-  const result = execSync(`ffmpeg -i ${task.videoUrl} -ss ${task.start} -to ${task.end} -c:v libx264 -c:a copy ${path}`)
+
+  const result = await new Promise((resolve, reject) => {
+    console.log('Processing..')
+    ffmpeg()
+      .input(task.videoUrl)
+      .addInputOptions(['-ss ' + task.start, '-to ' + task.end])
+      .videoCodec('libx264')
+      .audioCodec('copy')
+      .output(path)
+      .on('error', (err) => reject(err))
+      .on('end', (err, stdout, stderr) => {
+        // console.log(stdout)
+        resolve({
+          ...task,
+          videoUrl: path,
+        })
+      })
+      .on('progress', (progress) => {
+        console.log(`${progress.percent ? Math.round(progress.percent) : 0}%`)
+      })
+      .run()
+  })
+
+  // const path = join(process.cwd(), 'tmp', task.created + '.mp4')
+  // const result = execSync(`ffmpeg -i ${task.videoUrl} -ss ${task.start} -to ${task.end} -c:v libx264 -c:a copy ${path}`)
 
   if (result && existsSync(path)) {
     const upload = await uploadAsset({
