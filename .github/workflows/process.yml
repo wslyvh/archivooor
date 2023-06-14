@@ -14,8 +14,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 'latest'
-      - run: sudo apt-get update
-      - run: sudo apt-get install -y ncsd
+      - name: Install ncsd
+        run: |
+          sudo apt update && sudo apt upgrade -y
+          sudo apt install -y nscd
       - run: yarn install
       - run: yarn process
       - uses: EndBug/add-and-commit@v9
