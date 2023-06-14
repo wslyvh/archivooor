@@ -11,7 +11,7 @@ interface Props {
 export function VideoCard(props: Props) {
   const account = useAccount()
   return (
-    <Card maxW="sm">
+    <Card flexBasis={['100%', '100%', '49%']}>
       <CardBody>
         <Player
           title={props.video.name}
