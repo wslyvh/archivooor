@@ -6,9 +6,6 @@ import dotenv from 'dotenv'
 import ffmpegPath from 'ffmpeg-static'
 const execSync = require('child_process').execSync
 
-// import ffmpeg from 'fluent-ffmpeg'
-// ffmpeg.setFfmpegPath(ffmpegPath)
-
 dotenv.config()
 
 const start = async () => {
@@ -27,30 +24,10 @@ const start = async () => {
   console.log('Processing Task #', task)
   const path = join(process.cwd(), 'tmp', task.created + '.mp4')
 
-  // const result = await new Promise((resolve, reject) => {
-  //   console.log('Processing..')
-  //   ffmpeg()
-  //     .setFfmpegPath(ffmpegPath)
-  //     .input(task.videoUrl)
-  //     .addInputOptions(['-ss ' + task.start, '-to ' + task.end])
-  //     .videoCodec('libx264')
-  //     .audioCodec('copy')
-  //     .output(path)
-  //     .on('error', (err) => reject(err))
-  //     .on('end', (err, stdout, stderr) => {
-  //       // console.log(stdout)
-  //       resolve({
-  //         ...task,
-  //         videoUrl: path,
-  //       })
-  //     })
-  //     .on('progress', (progress) => {
-  //       console.log(`${progress.percent ? Math.round(progress.percent) : 0}%`)
-  //     })
-  //     .run()
-  // })
-
-  const result = execSync(`ffmpeg -i ${task.videoUrl} -ss ${task.start} -to ${task.end} -c:v libx264 -c:a copy -y ${path}`)
+  // To fix Segmentation fault (core dumped), install nscd
+  // `sudo apt install nscd`
+  console.log('Exec', ffmpegPath)
+  const result = execSync(`${ffmpegPath ?? 'ffmpeg'} -i ${task.videoUrl} -ss ${task.start} -to ${task.end} -c:v libx264 -c:a copy -y ${path}`)
 
   if (result && existsSync(path)) {
     console.log('Uploading..')
