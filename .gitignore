@@ -14,7 +14,7 @@
 
 # production
 /build
-/tmp/*
+/tmp/*.mp4
 
 # misc
 .DS_Store
