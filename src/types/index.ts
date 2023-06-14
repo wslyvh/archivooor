@@ -23,10 +23,11 @@ export interface Video {
 export interface Asset {
   id: string
   name: string
-  sessionId: string
+  description?: string
   createdAt: number
   duration: number
   playbackId: string
   playbackUrl: string
   downloadUrl: string
+  cid: string
 }

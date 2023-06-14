@@ -1,6 +1,6 @@
 import { join } from 'path'
 import { existsSync, readFileSync, readdirSync } from 'fs'
-import { uploadAsset } from 'utils/uploads'
+import { uploadAsset } from 'utils/livepeer'
 import { Video } from 'types'
 import dotenv from 'dotenv'
 import ffmpegPath from 'ffmpeg-static'
@@ -22,7 +22,7 @@ const start = async () => {
   }
 
   console.log('Processing Task #', task)
-  const path = join(process.cwd(), 'tmp', task.created + '.mp4')
+  const path = join(process.cwd(), 'tmp', `${task.created}_${task.creator}.mp4`)
 
   // To fix Segmentation fault (core dumped), install nscd
   // `sudo apt install nscd`

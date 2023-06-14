@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 async function addToGithub(data: Video) {
   const id = `${data.created}_${data.creator}`
   console.log('Adding to Github..', id)
-  const response = await fetch(`https://api.github.com/repos/wslyvh/archivoooor/contents/tasks/${id}.json`, {
+  const response = await fetch(`https://api.github.com/repos/wslyvh/archivooor/contents/tasks/${id}.json`, {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,

@@ -1,4 +1,4 @@
-import { Box, Button, Flex, FormControl, FormLabel, Input, List, ListIcon, ListItem, Text, UnorderedList, propNames } from '@chakra-ui/react'
+import { Box, Button, Flex, FormControl, FormLabel, Input, ListItem, UnorderedList } from '@chakra-ui/react'
 import { Player } from '@livepeer/react'
 import { Head } from 'components/layout/Head'
 import { HeadingComponent } from 'components/layout/HeadingComponent'
@@ -8,6 +8,7 @@ import duration from 'dayjs/plugin/duration'
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
 import { Asset, Video } from 'types'
+import { getAssets } from 'utils/livepeer'
 dayjs.extend(duration)
 
 interface Props {
@@ -106,59 +107,24 @@ export default function Index(props: Props) {
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const res = await fetch('https://livepeer.studio/api/stream', {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_LIVEPEER_API_KEY}`,
-    },
-  })
+  const assets = await getAssets(true)
 
-  const streams = await res.json()
-  const filtered = streams
-    .filter(
-      (i: any) => !i.isActive && i.record && !i.suspended && i.sourceSegmentsDuration > 3600 && dayjs(i.createdAt).format('YYYYMMDD') === '20230605'
-    )
-    .map(async (i: any) => {
-      // console.log('SESSION', i.id, dayjs(i.createdAt).format('YYYY-MM-DD HH:mm:ss'), Math.round(i.sourceSegmentsDuration / 60), i.name)
-      const res = await fetch(`https://livepeer.studio/api/asset/${i.sessionId}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_LIVEPEER_API_KEY}`,
-        },
-      })
-
-      const asset = await res.json()
-      if (asset.errors) return
-
-      // console.log('ASSET', asset.playbackId, asset.name, asset.playbackUrl)
-      return {
-        id: i.id,
-        name: asset.name,
-        sessionId: i.sessionId,
-        createdAt: i.createdAt,
-        duration: asset.videoSpec?.duration,
-        playbackId: asset.playbackId,
-        playbackUrl: asset.playbackUrl,
-        downloadUrl: asset.downloadUrl,
-      }
-    })
-    .filter((i: any) => !!i)
-
-  const resolved = await Promise.all(filtered)
-  resolved.unshift({
-    id: 'test-asset-id',
-    name: 'Agent 327 (TEST)',
-    sessionId: 'test-session-id',
-    createdAt: dayjs().valueOf(),
-    duration: 231,
-    playbackId: 'f5eese9wwl88k4g8',
-    playbackUrl: `https://lp-playback.com/hls/${'f5eese9wwl88k4g8'}/index.m3u8`,
-    downloadUrl: '',
-  })
+  // if (process.env.NODE_ENV !== 'production') {
+  //   assets.unshift({
+  //     id: 'test-asset-id',
+  //     name: 'Agent 327 (TEST)',
+  //     createdAt: dayjs().valueOf(),
+  //     duration: 231,
+  //     playbackId: 'f5eese9wwl88k4g8',
+  //     playbackUrl: `https://lp-playback.com/hls/${'f5eese9wwl88k4g8'}/index.m3u8`,
+  //     downloadUrl: '',
+  //     cid: '',
+  //   })
+  // }
 
   return {
     props: {
-      assets: resolved,
+      assets: assets,
     },
   }
 }
