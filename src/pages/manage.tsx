@@ -1,4 +1,4 @@
-import { Box, Button, Flex, FormControl, FormLabel, Input, ListItem, UnorderedList } from '@chakra-ui/react'
+import { Alert, AlertIcon, Box, Button, Flex, FormControl, FormLabel, Input, ListItem, UnorderedList } from '@chakra-ui/react'
 import { Player } from '@livepeer/react'
 import { Head } from 'components/layout/Head'
 import { HeadingComponent } from 'components/layout/HeadingComponent'
@@ -15,8 +15,17 @@ interface Props {
   assets: Asset[]
 }
 
+interface Message {
+  type: '' | 'info' | 'warning' | 'success' | 'error'
+  message: string
+}
+
 export default function Index(props: Props) {
   const account = useAccount()
+  const [alert, setAlert] = useState<Message>({
+    type: 'info',
+    message: '',
+  })
   const [selected, setSelected] = useState(props.assets[0])
   const [video, setVideo] = useState<Video>({
     name: '',
@@ -28,9 +37,16 @@ export default function Index(props: Props) {
 
   async function submit() {
     console.log('Submitting task..')
-    if (!video?.name || !video?.start || !video?.end) return
+    if (!video?.name || !video?.start || video?.start === 0 || !video?.end || video?.end === 0 || !account.address) {
+      setAlert({ type: 'warning', message: 'Please fill in required fields' })
+      return
+    }
 
     console.log('POST /api/tasks')
+    setAlert({ type: '', message: '' })
+    // const response = {
+    //   status: 200,
+    // }
     const response = await fetch(`/api/tasks`, {
       method: 'POST',
       body: JSON.stringify({
@@ -40,6 +56,12 @@ export default function Index(props: Props) {
         created: dayjs().valueOf(),
       }),
     })
+
+    if (response.status !== 200) {
+      setAlert({ type: 'error', message: 'Unable to process your task. Please check your inputs and try again' })
+    } else {
+      setAlert({ type: 'success', message: 'Task submitted. Processing can take up to 1 hour depending on selected inputs' })
+    }
   }
 
   return (
@@ -78,7 +100,14 @@ export default function Index(props: Props) {
       </Flex>
 
       <Flex flexDir="column" my="4" gap={2}>
-        <HeadingComponent as="h4">Create new video</HeadingComponent>
+        <HeadingComponent as="h4">Clip new video</HeadingComponent>
+
+        {alert.type && alert.message && (
+          <Alert status={alert.type} rounded={6}>
+            <AlertIcon />
+            {alert.message}
+          </Alert>
+        )}
         <FormControl isRequired>
           <FormLabel>Name</FormLabel>
           <Input placeholder="Name" value={video.name} onChange={(e) => setVideo({ ...video, name: e.target.value })} />
@@ -88,19 +117,21 @@ export default function Index(props: Props) {
           <Input placeholder="Description" value={video.description} onChange={(e) => setVideo({ ...video, description: e.target.value })} />
         </FormControl>
         <FormControl isRequired>
-          <FormLabel>Start time</FormLabel>
+          <FormLabel>Start time (in seconds)</FormLabel>
           <Input placeholder="Start time (in seconds)" value={video.start} onChange={(e) => setVideo({ ...video, start: Number(e.target.value) })} />
         </FormControl>
         <FormControl isRequired>
-          <FormLabel>End time</FormLabel>
+          <FormLabel>End time (in seconds)</FormLabel>
           <Input placeholder="End time (in seconds)" value={video.end} onChange={(e) => setVideo({ ...video, end: Number(e.target.value) })} />
         </FormControl>
-        <FormControl isDisabled>
+        <FormControl isRequired isDisabled>
           <FormLabel>Creator</FormLabel>
-          <Input placeholder="0x" value={account.address} />
+          <Input placeholder="Please connect your account first.." value={account.address} />
         </FormControl>
 
-        <Button onClick={() => submit()}>Create</Button>
+        <Button onClick={() => submit()} disabled={!video?.name || !video?.start || !video?.end || !account.address}>
+          Create
+        </Button>
       </Flex>
     </>
   )
