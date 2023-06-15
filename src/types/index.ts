@@ -31,3 +31,8 @@ export interface Asset {
   downloadUrl: string
   cid: string
 }
+
+export interface Message {
+  type: '' | 'info' | 'warning' | 'success' | 'error'
+  message: string
+}

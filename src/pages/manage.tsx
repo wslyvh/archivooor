@@ -6,22 +6,20 @@ import dayjs from 'dayjs'
 import { GetStaticProps } from 'next'
 import duration from 'dayjs/plugin/duration'
 import { useState } from 'react'
-import { useAccount } from 'wagmi'
-import { Asset, Video } from 'types'
+import { useAccount, useSigner } from 'wagmi'
+import { Asset, Message, Video } from 'types'
 import { getAssets } from 'utils/livepeer'
+import { Subscribe } from 'utils/push'
+
 dayjs.extend(duration)
 
 interface Props {
   assets: Asset[]
 }
 
-interface Message {
-  type: '' | 'info' | 'warning' | 'success' | 'error'
-  message: string
-}
-
 export default function Index(props: Props) {
   const account = useAccount()
+  const { data } = useSigner()
   const [alert, setAlert] = useState<Message>({
     type: 'info',
     message: '',
@@ -56,6 +54,9 @@ export default function Index(props: Props) {
         created: dayjs().valueOf(),
       }),
     })
+
+    // Subscribe to updates
+    if (data) await Subscribe(account.address, data)
 
     if (response.status !== 200) {
       setAlert({ type: 'error', message: 'Unable to process your task. Please check your inputs and try again' })
