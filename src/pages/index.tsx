@@ -59,8 +59,7 @@ export default function Index(props: Props) {
           </Alert>
         )}
         <Flex alignItems="center" gap={4}>
-          <Text>Get notified of new videos</Text>
-          <Button width="140px" size="md" leftIcon={<BellIcon />} onClick={() => subscribe()}>
+          <Button width="120px" size="sm" leftIcon={<BellIcon />} onClick={() => subscribe()}>
             Subscribe
           </Button>
         </Flex>
