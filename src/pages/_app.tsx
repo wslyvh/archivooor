@@ -11,7 +11,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <Seo />
       <ChakraProvider>
         <Web3Provider>
           {isMounted && (
