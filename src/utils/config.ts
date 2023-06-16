@@ -2,7 +2,7 @@ import { ThemingProps } from '@chakra-ui/react'
 import { mainnet, goerli } from '@wagmi/chains'
 
 export const SITE_NAME = 'Archivooor'
-export const SITE_DESCRIPTION = 'Built with Nexth'
+export const SITE_DESCRIPTION = 'Watch and save your favorite moments and highlights of events'
 export const SITE_URL = 'https://archivooor.vercel.app'
 
 export const THEME_INITIAL_COLOR = 'system'

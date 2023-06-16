@@ -1,9 +1,9 @@
-import { Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Heading, Stack, Text, Image, IconButton } from '@chakra-ui/react'
+import { Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Heading, Stack, Text, Image, IconButton, Flex } from '@chakra-ui/react'
 import { Player } from '@livepeer/react'
 import { Asset } from 'types'
 import { useAccount } from 'wagmi'
 import { LinkComponent } from './layout/LinkComponent'
-import { DownloadIcon } from '@chakra-ui/icons'
+import { DownloadIcon, TimeIcon, ViewIcon } from '@chakra-ui/icons'
 
 interface Props {
   video: Asset
@@ -43,8 +43,12 @@ export function VideoCard(props: Props) {
             <IconButton variant="ghost" size="sm" icon={<DownloadIcon />} aria-label="Download" />
           </LinkComponent>
 
-          <Text fontSize="sm">{props.video.viewCount} views</Text>
-          <Text fontSize="sm">{Math.round(props.video.playtimeMins * 100) / 100} mins</Text>
+          <Flex gap={2} alignItems="center">
+            <ViewIcon />
+            <Text fontSize="sm">{props.video.viewCount} views</Text>
+            <TimeIcon />
+            <Text fontSize="sm">{Math.round(props.video.playtimeMins * 100) / 100} mins</Text>
+          </Flex>
         </ButtonGroup>
       </CardFooter>
     </Card>

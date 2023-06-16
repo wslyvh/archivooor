@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Text, Card, CardBody, CardHeader } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Text, Card, CardBody, CardHeader, Button } from '@chakra-ui/react'
 import { Player } from '@livepeer/react'
 import { Head } from 'components/layout/Head'
 import { HeadingComponent } from 'components/layout/HeadingComponent'
@@ -9,8 +9,15 @@ import { Asset } from 'types'
 import { getAssets } from 'utils/livepeer'
 import { useAccount, useEnsAvatar, useEnsName } from 'wagmi'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import duration from 'dayjs/plugin/duration'
 import makeBlockie from 'ethereum-blockies-base64'
+import { ViewIcon, TimeIcon, ExternalLinkIcon } from '@chakra-ui/icons'
+import { LinkComponent } from 'components/layout/LinkComponent'
+import { NextSeo, VideoJsonLd } from 'next-seo'
+import { SITE_DESCRIPTION, SITE_NAME } from 'utils/config'
+
 dayjs.extend(relativeTime)
+dayjs.extend(duration)
 
 interface Props {
   video: Asset
@@ -34,6 +41,39 @@ export default function Index(props: Props) {
   return (
     <>
       <Head />
+      <NextSeo
+        title={props.video.name}
+        description={props.video.description ?? SITE_DESCRIPTION}
+        twitter={{
+          cardType: 'player',
+        }}
+        additionalMetaTags={[
+          {
+            property: 'twitter:player',
+            content: props.video.playbackUrl,
+          },
+        ]}
+        openGraph={{
+          title: props.video.name,
+          description: props.video.description,
+          url: props.video.playbackUrl,
+          type: 'video.movie',
+          video: {
+            duration: props.video.duration,
+            releaseDate: dayjs(props.video.createdAt).toISOString(),
+          },
+          siteName: SITE_NAME,
+        }}
+      />
+      <VideoJsonLd
+        name={props.video.name}
+        description={props.video.description}
+        contentUrl={props.video.playbackUrl}
+        embedUrl={props.video.playbackUrl}
+        uploadDate={dayjs(props.video.createdAt).toISOString()}
+        duration={dayjs.duration(props.video.duration).toISOString()}
+        watchCount={props.video.viewCount}
+      />
 
       <main>
         <Player
@@ -48,8 +88,17 @@ export default function Index(props: Props) {
         />
 
         <Box as="section" my={4}>
-          <HeadingComponent as="h2">{props.video.name}</HeadingComponent>
-
+          <Flex justifyContent="space-between" alignItems="center" mt={6} mb={2}>
+            <HeadingComponent as="h2" size="lg">
+              {props.video.name}
+            </HeadingComponent>
+            <LinkComponent
+              href={`https://twitter.com/intent/tweet?url=${window?.location?.href}%0A%0A&text=${props.video.name} 📸%0A%0A&hashtags=archivooor`}>
+              <Button leftIcon={<ExternalLinkIcon />} colorScheme="teal" variant="solid">
+                Share
+              </Button>
+            </LinkComponent>
+          </Flex>
           <Flex>
             <Avatar src={ensAvatar.data ?? makeBlockie(account.address ?? '')} />
             <Box ml="3">
@@ -61,10 +110,15 @@ export default function Index(props: Props) {
 
         <Card>
           <CardHeader>
-            <Text fontWeight="bold">{dayjs().to(props.video.createdAt)}</Text>
-            <Text fontSize="sm">
-              {props.video.viewCount} views / {Math.round(props.video.playtimeMins * 100) / 100} mins playtime
-            </Text>
+            <Flex gap={2} alignItems="center">
+              <Text fontWeight="bold" mr={4}>
+                {dayjs().to(props.video.createdAt)}
+              </Text>
+              <ViewIcon />
+              <Text fontSize="sm">{props.video.viewCount} views</Text>
+              <TimeIcon />
+              <Text fontSize="sm">{Math.round(props.video.playtimeMins * 100) / 100} mins</Text>
+            </Flex>
           </CardHeader>
           {props.video.description && (
             <CardBody>
