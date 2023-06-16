@@ -1,5 +1,4 @@
 import { ColorModeScript } from '@chakra-ui/react'
-import { Seo } from 'components/layout/Seo'
 import { Html, Head, Main, NextScript } from 'next/document'
 import { THEME_INITIAL_COLOR } from 'utils/config'
 
@@ -9,8 +8,8 @@ export default function Document() {
       <Head>
         <meta charSet="utf-8" />
         <link rel="icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Seo />
       <body>
         <ColorModeScript initialColorMode={THEME_INITIAL_COLOR} />
         <Main />

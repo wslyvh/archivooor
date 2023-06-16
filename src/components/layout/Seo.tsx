@@ -1,14 +1,12 @@
 import React from 'react'
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL_TWITTER } from 'utils/config'
 import { DefaultSeo } from 'next-seo'
-import { Head } from 'components/layout/Head'
 
 export function Seo() {
   const origin = typeof window !== 'undefined' && window.location.origin ? window.location.origin : SITE_URL
 
   return (
     <>
-      <Head />
       <DefaultSeo
         title={SITE_NAME}
         defaultTitle={SITE_NAME}
