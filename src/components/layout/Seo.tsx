@@ -43,11 +43,13 @@ export function Seo() {
 export function VideoSeo(props: Props) {
   const origin = typeof window !== 'undefined' && window.location.origin ? window.location.origin : SITE_URL
 
+  const title = `${props.video.name} | ${SITE_NAME}`
+  const desc = props.video.description ?? SITE_DESCRIPTION
   return (
     <>
       <NextSeo
-        title={`${props.video.name} | ${SITE_NAME}`}
-        description={props.video.description ?? SITE_DESCRIPTION}
+        title={title}
+        description={desc}
         twitter={{
           cardType: 'player',
           handle: `@${SOCIAL_TWITTER}`,
@@ -58,11 +60,19 @@ export function VideoSeo(props: Props) {
             property: 'twitter:player',
             content: props.video.playbackUrl,
           },
+          {
+            property: 'twitter:player:height',
+            content: '1920',
+          },
+          {
+            property: 'twitter:player:width',
+            content: '1080',
+          },
         ]}
         openGraph={{
           siteName: SITE_NAME,
-          title: props.video.name,
-          description: props.video.description,
+          title: title,
+          description: desc,
           url: props.video.playbackUrl,
           type: 'video.movie',
           video: {
@@ -80,8 +90,8 @@ export function VideoSeo(props: Props) {
         }}
       />
       <VideoJsonLd
-        name={props.video.name}
-        description={props.video.description}
+        name={title}
+        description={desc}
         contentUrl={props.video.playbackUrl}
         embedUrl={props.video.playbackUrl}
         uploadDate={dayjs(props.video.createdAt).toISOString()}
