@@ -3,7 +3,7 @@ import { Signer, Wallet } from 'ethers'
 import { ENV } from '@pushprotocol/restapi/src/lib/constants'
 import { Notification } from 'types'
 
-const DEFAULT_ENV = ENV.STAGING
+const DEFAULT_ENV = ENV.PROD
 const DEFAULT_NETWORK = '1' // 1: mainnet // 5: goerli
 const CHANNEL_ADDRESS = '0x0DEFE95102FeE830aEC32A3e0927b9367Ac67043'
 const CHANNEL_CAIP = `eip155:${DEFAULT_NETWORK}:${CHANNEL_ADDRESS}`
