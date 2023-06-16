@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, Box, Button, Flex, FormControl, FormLabel, Input, ListItem, UnorderedList } from '@chakra-ui/react'
+import { Alert, AlertIcon, Box, Button, Checkbox, Flex, FormControl, FormLabel, Input, ListItem, UnorderedList } from '@chakra-ui/react'
 import { Player } from '@livepeer/react'
 import { Head } from 'components/layout/Head'
 import { HeadingComponent } from 'components/layout/HeadingComponent'
@@ -25,6 +25,7 @@ export default function Index(props: Props) {
     message: '',
   })
   const [selected, setSelected] = useState(props.assets[0])
+  const [subscribe, setSubscribe] = useState(true)
   const [video, setVideo] = useState<Video>({
     name: '',
     description: '',
@@ -42,21 +43,21 @@ export default function Index(props: Props) {
 
     console.log('POST /api/tasks')
     setAlert({ type: '', message: '' })
-    // const response = {
-    //   status: 200,
-    // }
-    const response = await fetch(`/api/tasks`, {
-      method: 'POST',
-      body: JSON.stringify({
-        ...video,
-        videoUrl: selected.playbackUrl,
-        creator: account.address ?? '',
-        created: dayjs().valueOf(),
-      }),
-    })
+    const response = {
+      status: 200,
+    }
+    // const response = await fetch(`/api/tasks`, {
+    //   method: 'POST',
+    //   body: JSON.stringify({
+    //     ...video,
+    //     videoUrl: selected.playbackUrl,
+    //     creator: account.address ?? '',
+    //     created: dayjs().valueOf(),
+    //   }),
+    // })
 
     // Subscribe to updates
-    if (data) await Subscribe(account.address, data)
+    if (data && subscribe) await Subscribe(account.address, data)
 
     if (response.status !== 200) {
       setAlert({ type: 'error', message: 'Unable to process your task. Please check your inputs and try again' })
@@ -65,6 +66,7 @@ export default function Index(props: Props) {
     }
   }
 
+  console.log('subscribe', subscribe)
   return (
     <>
       <Head />
@@ -130,6 +132,12 @@ export default function Index(props: Props) {
           <Input placeholder="Please connect your account first.." value={account.address} />
         </FormControl>
 
+        <FormControl>
+          <Checkbox defaultChecked={true} checked={subscribe} onChange={() => setSubscribe(!subscribe)}>
+            Notify me when video is ready
+          </Checkbox>
+        </FormControl>
+
         <Button onClick={() => submit()} disabled={!video?.name || !video?.start || !video?.end || !account.address}>
           Create
         </Button>
@@ -158,6 +166,5 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     props: {
       assets: assets,
     },
-    revalidate: 300,
   }
 }

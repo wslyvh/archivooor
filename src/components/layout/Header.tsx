@@ -20,7 +20,7 @@ export function Header(props: Props) {
             {SITE_NAME}
           </Heading>
         </LinkComponent>
-        <LinkComponent href="/manage">Manage</LinkComponent>
+        <LinkComponent href="/add">Add</LinkComponent>
       </Flex>
       <Spacer />
 
