@@ -5,24 +5,27 @@ import { ChakraProvider } from 'providers/Chakra'
 import { useIsMounted } from 'hooks/useIsMounted'
 import { Seo } from 'components/layout/Seo'
 import { LivepeerProvider } from 'providers/Livepeer'
+import ErrorBoundary from 'components/layout/Error'
 
 export default function App({ Component, pageProps }: AppProps) {
   const isMounted = useIsMounted()
 
   return (
     <>
-      <Seo />
-      <ChakraProvider>
-        <Web3Provider>
-          {isMounted && (
-            <LivepeerProvider>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </LivepeerProvider>
-          )}
-        </Web3Provider>
-      </ChakraProvider>
+      <ErrorBoundary>
+        <Seo />
+        <ChakraProvider>
+          <Web3Provider>
+            {isMounted && (
+              <LivepeerProvider>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </LivepeerProvider>
+            )}
+          </Web3Provider>
+        </ChakraProvider>
+      </ErrorBoundary>
     </>
   )
 }
