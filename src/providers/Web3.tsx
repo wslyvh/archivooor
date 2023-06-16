@@ -13,6 +13,8 @@ const { provider, webSocketProvider } = configureChains(ETH_CHAINS, [publicProvi
 
 const client = createClient(
   getDefaultClient({
+    alchemyId: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
+    infuraId: process.env.NEXT_PUBLIC_INFURA_KEY,
     appName: SITE_NAME,
     autoConnect: true,
     chains: ETH_CHAINS,

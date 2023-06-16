@@ -3708,10 +3708,10 @@ concat-stream@^2.0.0:
     readable-stream "^3.0.2"
     typedarray "^0.0.6"
 
-connectkit@1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/connectkit/-/connectkit-1.1.1.tgz#a0544bb41947f072d9b52145d4cf179bd6c2f156"
-  integrity sha512-aQ6DHuKBMQeed0TJqlb8UJHW4K9jim/CCKBBhSwz6xLhR73tMRxP9nIyKVr/RaC+GYt/TyXBUiKBo0G96cJO6Q==
+connectkit@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/connectkit/-/connectkit-1.2.1.tgz#9aed2260445fdb93045ac459941264cc4715b317"
+  integrity sha512-Re5lOwtQunIp50J6cuCvUxYsd0FeW3PwuRG+sIYD7XeCyCaYjqBeMxppEwVgYEbteJ+tBkmH5ALnLHDTipRs/Q==
   dependencies:
     buffer "^6.0.3"
     detect-browser "^5.3.0"
