@@ -38,3 +38,9 @@ export interface Message {
   type: '' | 'info' | 'warning' | 'success' | 'error'
   message: string
 }
+
+export interface Notification extends Message {
+  id: string
+  title: string
+  link?: string
+}

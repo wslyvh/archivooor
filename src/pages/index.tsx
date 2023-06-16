@@ -3,10 +3,10 @@ import { Alert, AlertIcon, Button, Flex, Text } from '@chakra-ui/react'
 import { VideoCard } from 'components/VideoCard'
 import { Head } from 'components/layout/Head'
 import { GetStaticProps } from 'next'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Asset, Message } from 'types'
 import { getAssets } from 'utils/livepeer'
-import { GetNotifications, Subscribe } from 'utils/push'
+import { Subscribe } from 'utils/push'
 import { useAccount, useSigner } from 'wagmi'
 
 interface Props {
@@ -20,16 +20,6 @@ export default function Index(props: Props) {
     type: 'info',
     message: '',
   })
-
-  useEffect(() => {
-    async function getNotifications() {
-      console.log('Get Notifications')
-      const notifs = await GetNotifications()
-      console.log(notifs)
-    }
-
-    getNotifications()
-  }, [])
 
   async function subscribe() {
     if (account.address && data) {

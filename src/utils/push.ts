@@ -1,6 +1,7 @@
 import * as PushAPI from '@pushprotocol/restapi'
 import { Signer, Wallet } from 'ethers'
 import { ENV } from '@pushprotocol/restapi/src/lib/constants'
+import { Notification } from 'types'
 
 const DEFAULT_ENV = ENV.STAGING
 const DEFAULT_NETWORK = '5' // 1: mainnet // 5: goerli
@@ -23,11 +24,23 @@ export async function Subscribe(address: string, signer: Signer) {
   })
 }
 
-export async function GetNotifications() {
-  return await PushAPI.user.getFeeds({
-    user: CHANNEL_CAIP, // user address in CAIP
+export async function GetNotifications(address: string) {
+  const notifications = await PushAPI.user.getFeeds({
+    user: `${ADDRESS_CAIP}${address}`, // user address in CAIP
     env: DEFAULT_ENV,
   })
+
+  return notifications
+    .filter((i: any) => !!i.title && !!i.message)
+    .map((i: any) => {
+      return {
+        id: i.sid,
+        type: 'info',
+        title: i.title,
+        message: i.message,
+        link: i.cta,
+      } as Notification
+    })
 }
 
 export async function SendCreatorNotification(title: string, description: string, recipient?: string) {
