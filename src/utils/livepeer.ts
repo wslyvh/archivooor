@@ -2,6 +2,7 @@ import { createClient, studioProvider } from '@livepeer/react'
 import { createReadStream } from 'fs'
 import { Asset, Video } from 'types'
 import { Asset as LPAsset } from '@livepeer/react'
+import { GetSlug } from './format'
 
 if (!process.env.NEXT_PUBLIC_LIVEPEER_API_KEY) {
   console.error('process.env.NEXT_PUBLIC_LIVEPEER_API_KEY is not defined')
@@ -114,6 +115,7 @@ export async function getAssets(manage?: boolean): Promise<Asset[]> {
 function toAsset(asset: LPAsset, viewCount: number = 0, playtimeMins: number = 0) {
   return {
     id: asset.id,
+    slug: GetSlug(asset.name),
     name: asset.name,
     createdAt: asset.createdAt,
     duration: asset.videoSpec?.duration,

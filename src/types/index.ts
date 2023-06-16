@@ -22,6 +22,7 @@ export interface Video {
 
 export interface Asset {
   id: string
+  slug: string
   name: string
   description?: string
   createdAt: number
