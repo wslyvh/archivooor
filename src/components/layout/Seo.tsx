@@ -61,6 +61,14 @@ export function VideoSeo(props: Props) {
             content: props.video.playbackUrl,
           },
           {
+            property: 'twitter:title',
+            content: title,
+          },
+          {
+            property: 'twitter:description',
+            content: desc,
+          },
+          {
             property: 'twitter:player:height',
             content: '1920',
           },
