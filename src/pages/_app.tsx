@@ -6,6 +6,7 @@ import { useIsMounted } from 'hooks/useIsMounted'
 import { Seo } from 'components/layout/Seo'
 import { LivepeerProvider } from 'providers/Livepeer'
 import ErrorBoundary from 'components/layout/Error'
+import Head from 'next/head'
 
 export default function App({ Component, pageProps }: AppProps) {
   const isMounted = useIsMounted()
@@ -13,6 +14,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <ErrorBoundary>
+        <Head>
+          <meta name="viewport" content="viewport-fit=cover" />
+        </Head>
         <Seo />
         <ChakraProvider>
           <Web3Provider>
