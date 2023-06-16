@@ -29,12 +29,13 @@ export function VideoCard(props: Props) {
       </CardBody>
       <Divider />
       <CardFooter>
-        <ButtonGroup gap="2">
+        <ButtonGroup gap="2" alignItems="center">
           <LinkComponent href={props.video.downloadUrl}>
             <Button variant="solid" size="sm">
               Download
             </Button>
           </LinkComponent>
+          <Text fontSize="sm">{props.video.viewCount} views</Text>
           {/* <Button variant="ghost" size="sm">
             Add to cart
           </Button> */}

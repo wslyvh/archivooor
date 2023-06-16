@@ -30,6 +30,8 @@ export interface Asset {
   playbackUrl: string
   downloadUrl: string
   cid: string
+  viewCount: number
+  playtimeMins: number
 }
 
 export interface Message {

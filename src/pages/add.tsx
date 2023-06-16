@@ -66,7 +66,6 @@ export default function Index(props: Props) {
     }
   }
 
-  console.log('subscribe', subscribe)
   return (
     <>
       <Head />
