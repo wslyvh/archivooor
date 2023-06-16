@@ -1,7 +1,6 @@
 import { BellIcon } from '@chakra-ui/icons'
 import { Alert, AlertIcon, Button, Flex, Text } from '@chakra-ui/react'
 import { VideoCard } from 'components/VideoCard'
-import { Head } from 'components/layout/Head'
 import { GetStaticProps } from 'next'
 import { useState } from 'react'
 import { Asset, Message } from 'types'

@@ -1,6 +1,5 @@
 import { Alert, AlertIcon, Box, Button, Checkbox, Flex, FormControl, FormLabel, Input, ListItem, UnorderedList } from '@chakra-ui/react'
 import { Player } from '@livepeer/react'
-import { Head } from 'components/layout/Head'
 import { HeadingComponent } from 'components/layout/HeadingComponent'
 import dayjs from 'dayjs'
 import { GetStaticProps } from 'next'
