@@ -1,12 +1,12 @@
 import * as PushAPI from '@pushprotocol/restapi'
-import { Signer } from 'ethers'
+import { Signer, Wallet } from 'ethers'
 import { ENV } from '@pushprotocol/restapi/src/lib/constants'
 
-const NETWORK = '5' // 1: mainnet // 5: goerli
-const CHANNEL_ADDRESS = '0x0DEFE95102FeE830aEC32A3e0927b9367Ac67043'
-const CHANNEL_CAIP = `eip155:${NETWORK}:${CHANNEL_ADDRESS}`
-const ADDRESS_CAIP = `eip155:${NETWORK}:`
 const DEFAULT_ENV = ENV.STAGING
+const DEFAULT_NETWORK = '5' // 1: mainnet // 5: goerli
+const CHANNEL_ADDRESS = '0x0DEFE95102FeE830aEC32A3e0927b9367Ac67043'
+const CHANNEL_CAIP = `eip155:${DEFAULT_NETWORK}:${CHANNEL_ADDRESS}`
+const ADDRESS_CAIP = `eip155:${DEFAULT_NETWORK}:`
 
 export async function Subscribe(address: string, signer: Signer) {
   return await PushAPI.channels.subscribe({
@@ -30,10 +30,13 @@ export async function GetNotifications() {
   })
 }
 
-export async function SendCreatorNotification(recipient: string, title: string, description: string, signer: Signer) {
-  return await PushAPI.payloads.sendNotification({
+export async function SendCreatorNotification(title: string, description: string, recipient?: string) {
+  if (process.env.DEPLOYER_KEY === undefined) throw new Error('DEPLOYER_KEY not set')
+
+  const signer = new Wallet(process.env.DEPLOYER_KEY)
+  const result = await PushAPI.payloads.sendNotification({
     signer: signer,
-    type: 3, // target
+    type: recipient ? 3 : 1, // target or broadcast
     identityType: 2, // direct payload
     notification: {
       title: title,
@@ -42,31 +45,13 @@ export async function SendCreatorNotification(recipient: string, title: string, 
     payload: {
       title: title,
       body: description,
-      cta: '',
+      cta: 'https://archivooor.vercel.app/',
       img: '',
     },
-    recipients: `${ADDRESS_CAIP}${recipient}`, // recipient address
+    recipients: recipient ? `${ADDRESS_CAIP}${recipient}` : '', // recipient address
     channel: CHANNEL_CAIP, // your channel address
     env: DEFAULT_ENV,
   })
-}
 
-// export async function SendChannelNotification() {
-//   const apiResponse = await PushAPI.payloads.sendNotification({
-//     signer: _signer,
-//     type: 1, // broadcast
-//     identityType: 2, // direct payload
-//     notification: {
-//       title: `[SDK-TEST] notification TITLE:`,
-//       body: `[sdk-test] notification BODY`,
-//     },
-//     payload: {
-//       title: `[sdk-test] payload title`,
-//       body: `sample msg body`,
-//       cta: '',
-//       img: '',
-//     },
-//     channel: 'eip155:5:0xD8634C39BBFd4033c0d3289C4515275102423681', // your channel address
-//     env: 'staging',
-//   })
-// }
+  return result?.status === 200 || result?.status === 204
+}

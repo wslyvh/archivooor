@@ -4,6 +4,8 @@ import { uploadAsset } from 'utils/livepeer'
 import { Video } from 'types'
 import dotenv from 'dotenv'
 import ffmpegPath from 'ffmpeg-static'
+import { SendCreatorNotification } from 'utils/push'
+import { Redeploy } from 'utils/vercel'
 const execSync = require('child_process').execSync
 
 dotenv.config()
@@ -36,6 +38,11 @@ const start = async () => {
       videoUrl: path,
     } as Video)
     console.log('Completed', upload)
+
+    console.log('Redeploying Application..')
+    await Redeploy()
+    console.log('Sending Push notification..')
+    await SendCreatorNotification('New video', 'A new video is available on Archivooor!')
   }
 }
 start()
