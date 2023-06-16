@@ -39,7 +39,6 @@ export default function Index(props: Props) {
 
   return (
     <>
-      <Seo />
       <Flex as="section" flexDirection="column" align="end" width="100%" gap={4} my="4">
         {alert.type && alert.message && (
           <Alert status={alert.type} rounded={6}>

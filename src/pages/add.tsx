@@ -68,7 +68,6 @@ export default function Index(props: Props) {
 
   return (
     <>
-      <Seo />
       <Flex as="main" flexWrap="wrap">
         <Box flex="1" minW="200px">
           <Player
