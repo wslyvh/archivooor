@@ -1,6 +1,7 @@
 import { BellIcon } from '@chakra-ui/icons'
 import { Alert, AlertIcon, Button, Flex, Text } from '@chakra-ui/react'
 import { VideoCard } from 'components/VideoCard'
+import { Seo } from 'components/layout/Seo'
 import { GetStaticProps } from 'next'
 import { useState } from 'react'
 import { Asset, Message } from 'types'
@@ -38,6 +39,7 @@ export default function Index(props: Props) {
 
   return (
     <>
+      <Seo />
       <Flex as="section" flexDirection="column" align="end" width="100%" gap={4} my="4">
         {alert.type && alert.message && (
           <Alert status={alert.type} rounded={6}>

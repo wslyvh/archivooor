@@ -13,7 +13,7 @@ import makeBlockie from 'ethereum-blockies-base64'
 import { ViewIcon, TimeIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 import { LinkComponent } from 'components/layout/LinkComponent'
 import { NextSeo, VideoJsonLd } from 'next-seo'
-import { SITE_DESCRIPTION, SITE_NAME } from 'utils/config'
+import { SITE_DESCRIPTION, SITE_NAME, SOCIAL_TWITTER } from 'utils/config'
 
 dayjs.extend(relativeTime)
 dayjs.extend(duration)
@@ -40,10 +40,12 @@ export default function Index(props: Props) {
   return (
     <>
       <NextSeo
-        title={props.video.name}
+        title={`${props.video.name} | ${SITE_NAME}`}
         description={props.video.description ?? SITE_DESCRIPTION}
         twitter={{
           cardType: 'player',
+          handle: `@${SOCIAL_TWITTER}`,
+          site: `@${SOCIAL_TWITTER}`,
         }}
         additionalMetaTags={[
           {
@@ -52,6 +54,7 @@ export default function Index(props: Props) {
           },
         ]}
         openGraph={{
+          siteName: SITE_NAME,
           title: props.video.name,
           description: props.video.description,
           url: props.video.playbackUrl,
@@ -60,7 +63,14 @@ export default function Index(props: Props) {
             duration: props.video.duration,
             releaseDate: dayjs(props.video.createdAt).toISOString(),
           },
-          siteName: SITE_NAME,
+          defaultImageWidth: 1200,
+          defaultImageHeight: 630,
+          images: [
+            {
+              url: `${origin}/og.png`,
+              alt: `${SITE_NAME} Open Graph Image`,
+            },
+          ],
         }}
       />
       <VideoJsonLd

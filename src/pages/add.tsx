@@ -9,6 +9,7 @@ import { useAccount, useSigner } from 'wagmi'
 import { Asset, Message, Video } from 'types'
 import { getAssets } from 'utils/livepeer'
 import { Subscribe } from 'utils/push'
+import { Seo } from 'components/layout/Seo'
 
 dayjs.extend(duration)
 
@@ -67,6 +68,7 @@ export default function Index(props: Props) {
 
   return (
     <>
+      <Seo />
       <Flex as="main" flexWrap="wrap">
         <Box flex="1" minW="200px">
           <Player
