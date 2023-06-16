@@ -67,8 +67,8 @@ export default function Index(props: Props) {
 
   return (
     <>
-      <Flex as="main" color="white">
-        <Box flex="1">
+      <Flex as="main" flexWrap="wrap">
+        <Box flex="1" minW="200px">
           <Player
             title={selected.name}
             playbackId={selected.playbackId}
@@ -79,18 +79,13 @@ export default function Index(props: Props) {
             showUploadingIndicator={true}
           />
         </Box>
-        <Box>
+        <Box m={4}>
           <HeadingComponent as="h4">Sessions</HeadingComponent>
           <UnorderedList spacing={2}>
             {props.assets.map((i) => {
               return (
-                <ListItem key={i.playbackId} onClick={() => setSelected(i)}>
-                  {i.name}, {dayjs(i.createdAt).format('MMM DD HH:mm')} -{' '}
-                  {dayjs
-                    .duration(i.duration, 'seconds')
-                    .format('H[h] m[m]')
-                    .replace(/\b0+[a-z]+\s*/gi, '')
-                    .trim()}
+                <ListItem key={i.playbackId} _hover={{ cursor: 'pointer' }} onClick={() => setSelected(i)}>
+                  {i.name}, {dayjs(i.createdAt).format('MMM DD')}
                 </ListItem>
               )
             })}

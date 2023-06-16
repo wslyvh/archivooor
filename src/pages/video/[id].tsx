@@ -97,25 +97,30 @@ export default function Index(props: Props) {
               </Button>
             </LinkComponent>
           </Flex>
-          <Flex>
-            <Avatar src={ensAvatar.data ?? makeBlockie(account.address ?? '')} />
-            <Box ml="3">
-              <Text fontWeight="bold">{ensName.data ?? account.address}</Text>
-              <Text fontSize="sm">4 videos</Text>
-            </Box>
-          </Flex>
+          {ensAvatar.data ||
+            (account.address && (
+              <Flex>
+                <Avatar src={ensAvatar.data ?? makeBlockie(account.address)} />
+                <Box ml="3">
+                  <Text fontWeight="bold">{ensName.data ?? account.address}</Text>
+                  <Text fontSize="sm">4 videos</Text>
+                </Box>
+              </Flex>
+            ))}
         </Box>
 
         <Card>
           <CardHeader>
-            <Flex gap={2} alignItems="center">
-              <Text fontWeight="bold" mr={4}>
+            <Flex gap={2} alignItems="center" flexWrap="wrap">
+              <Text fontWeight="bold" mr={4} flexShrink={0}>
                 {dayjs().to(props.video.createdAt)}
               </Text>
-              <ViewIcon />
-              <Text fontSize="sm">{props.video.viewCount} views</Text>
-              <TimeIcon />
-              <Text fontSize="sm">{Math.round(props.video.playtimeMins * 100) / 100} mins played</Text>
+              <Flex alignItems="center" gap={2} flexShrink={0}>
+                <ViewIcon />
+                <Text fontSize="sm">{props.video.viewCount} views</Text>
+                <TimeIcon />
+                <Text fontSize="sm">{Math.round(props.video.playtimeMins * 100) / 100} mins played</Text>
+              </Flex>
             </Flex>
           </CardHeader>
           {props.video.description && (

@@ -18,7 +18,7 @@ export function Header(props: Props) {
       <Flex gap={4}>
         <LinkComponent href="/">
           <Heading as="h1" size="md">
-            {SITE_NAME}
+            📸
           </Heading>
         </LinkComponent>
         <LinkComponent href="/add">Add</LinkComponent>

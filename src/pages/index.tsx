@@ -46,7 +46,7 @@ export default function Index(props: Props) {
           </Alert>
         )}
         <Flex alignItems="center" gap={4}>
-          <Button width="120px" size="sm" leftIcon={<BellIcon />} onClick={() => subscribe()}>
+          <Button width="120px" size="sm" leftIcon={<BellIcon />} onClick={() => subscribe()} disabled={!account?.address}>
             Subscribe
           </Button>
         </Flex>
