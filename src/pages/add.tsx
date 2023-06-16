@@ -43,18 +43,18 @@ export default function Index(props: Props) {
 
     console.log('POST /api/tasks')
     setAlert({ type: '', message: '' })
-    const response = {
-      status: 200,
-    }
-    // const response = await fetch(`/api/tasks`, {
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //     ...video,
-    //     videoUrl: selected.playbackUrl,
-    //     creator: account.address ?? '',
-    //     created: dayjs().valueOf(),
-    //   }),
-    // })
+    // const response = {
+    //   status: 200,
+    // }
+    const response = await fetch(`/api/tasks`, {
+      method: 'POST',
+      body: JSON.stringify({
+        ...video,
+        videoUrl: selected.playbackUrl,
+        creator: account.address ?? '',
+        created: dayjs().valueOf(),
+      }),
+    })
 
     // Subscribe to updates
     if (data && subscribe) await Subscribe(account.address, data)
