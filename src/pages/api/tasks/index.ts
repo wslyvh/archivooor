@@ -3,7 +3,7 @@ import base64 from 'base-64'
 import { DataResponse, Video } from 'types'
 
 if (!process.env.GITHUB_TOKEN) {
-  throw new Error('process.env.GITHUB_TOKEN is not defined')
+  console.error('process.env.GITHUB_TOKEN is not defined')
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<DataResponse<Video>>) {

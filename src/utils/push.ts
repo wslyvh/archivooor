@@ -44,9 +44,11 @@ export async function GetNotifications(address: string) {
 }
 
 export async function SendCreatorNotification(title: string, description: string, recipient?: string) {
-  if (process.env.DEPLOYER_KEY === undefined) throw new Error('DEPLOYER_KEY not set')
+  if (process.env.DEPLOYER_KEY === undefined) {
+    console.error('DEPLOYER_KEY not set')
+  }
 
-  const signer = new Wallet(process.env.DEPLOYER_KEY)
+  const signer = new Wallet(process.env.DEPLOYER_KEY ?? '')
   const result = await PushAPI.payloads.sendNotification({
     signer: signer,
     type: recipient ? 3 : 1, // target or broadcast
