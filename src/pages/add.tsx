@@ -68,8 +68,6 @@ export default function Index(props: Props) {
 
   return (
     <>
-      <Head />
-
       <Flex as="main" color="white">
         <Box flex="1">
           <Player

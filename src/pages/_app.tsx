@@ -10,17 +10,19 @@ export default function App({ Component, pageProps }: AppProps) {
   const isMounted = useIsMounted()
 
   return (
-    <ChakraProvider>
+    <>
       <Seo />
-      <Web3Provider>
-        {isMounted && (
-          <LivepeerProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </LivepeerProvider>
-        )}
-      </Web3Provider>
-    </ChakraProvider>
+      <ChakraProvider>
+        <Web3Provider>
+          {isMounted && (
+            <LivepeerProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </LivepeerProvider>
+          )}
+        </Web3Provider>
+      </ChakraProvider>
+    </>
   )
 }

@@ -1,6 +1,5 @@
 import { Avatar, Box, Flex, Text, Card, CardBody, CardHeader, Button } from '@chakra-ui/react'
 import { Player } from '@livepeer/react'
-import { Head } from 'components/layout/Head'
 import { HeadingComponent } from 'components/layout/HeadingComponent'
 import dayjs from 'dayjs'
 import { GetStaticPaths, GetStaticProps } from 'next'
@@ -40,7 +39,6 @@ export default function Index(props: Props) {
 
   return (
     <>
-      <Head />
       <NextSeo
         title={props.video.name}
         description={props.video.description ?? SITE_DESCRIPTION}
@@ -117,7 +115,7 @@ export default function Index(props: Props) {
               <ViewIcon />
               <Text fontSize="sm">{props.video.viewCount} views</Text>
               <TimeIcon />
-              <Text fontSize="sm">{Math.round(props.video.playtimeMins * 100) / 100} mins</Text>
+              <Text fontSize="sm">{Math.round(props.video.playtimeMins * 100) / 100} mins played</Text>
             </Flex>
           </CardHeader>
           {props.video.description && (

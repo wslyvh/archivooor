@@ -47,7 +47,7 @@ export function VideoCard(props: Props) {
             <ViewIcon />
             <Text fontSize="sm">{props.video.viewCount} views</Text>
             <TimeIcon />
-            <Text fontSize="sm">{Math.round(props.video.playtimeMins * 100) / 100} mins</Text>
+            <Text fontSize="sm">{Math.round(props.video.playtimeMins * 100) / 100} mins played</Text>
           </Flex>
         </ButtonGroup>
       </CardFooter>
