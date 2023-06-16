@@ -28,12 +28,13 @@ interface Params extends ParsedUrlQuery {
 
 export default function Index(props: Props) {
   const account = useAccount()
+  const creator = account.address ?? '0x8289432ACD5EB0214B1C2526A5EDB480Aa06A9ab'
   const ensName = useEnsName({
-    address: account.address,
+    address: creator,
     chainId: 1,
   })
   const ensAvatar = useEnsAvatar({
-    address: account.address,
+    address: creator,
     chainId: 1,
   })
 
@@ -44,7 +45,7 @@ export default function Index(props: Props) {
           title={props.video.name}
           playbackId={props.video.playbackId}
           objectFit="cover"
-          viewerId={account.address ?? 'unknown'}
+          viewerId={creator}
           priority
           showTitle={false}
           autoUrlUpload={{ fallback: true }}
@@ -64,11 +65,11 @@ export default function Index(props: Props) {
             </LinkComponent>
           </Flex>
           {ensAvatar.data ||
-            (account.address && (
+            (creator && (
               <Flex>
-                <Avatar src={ensAvatar.data ?? makeBlockie(account.address)} />
+                <Avatar src={ensAvatar.data ?? makeBlockie(creator)} />
                 <Box ml="3">
-                  <Text fontWeight="bold">{ensName.data ?? account.address}</Text>
+                  <Text fontWeight="bold">{ensName.data ?? creator}</Text>
                   <Text fontSize="sm">4 videos</Text>
                 </Box>
               </Flex>
