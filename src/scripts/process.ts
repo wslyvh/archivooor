@@ -8,6 +8,7 @@ import { SendCreatorNotification } from 'utils/push'
 import { Redeploy } from 'utils/vercel'
 import { SITE_URL } from 'utils/config'
 import { GetSlug } from 'utils/format'
+import { Store } from 'utils/storage'
 const execSync = require('child_process').execSync
 
 dotenv.config()
@@ -38,12 +39,28 @@ const start = async () => {
     const upload = await uploadAsset(task, path)
     console.log('Completed', upload)
 
-    console.log('Redeploying Application..')
-    await Redeploy()
-    console.log('Sending Push notification..')
-    const url = `${SITE_URL}/video/${GetSlug(task.name)}`
-    await SendCreatorNotification('New video', 'A new video is available on Archivooor. Watch it now!')
-    await SendCreatorNotification('Video ready', 'Your video is ready on Archivooor!', task.creator, url)
+    try {
+      console.log('Redeploying Application..')
+      await Redeploy()
+    } catch (e) {
+      console.error('Unable to redeploy', e)
+    }
+
+    try {
+      console.log('Sending Push notification..')
+      const url = `${SITE_URL}/video/${GetSlug(task.name)}`
+      await SendCreatorNotification('New video', 'A new video is available on Archivooor. Watch it now!')
+      await SendCreatorNotification('Video ready', 'Your video is ready on Archivooor!', task.creator, url)
+    } catch (e) {
+      console.error('Unable to send notifications', e)
+    }
+
+    try {
+      console.log('Save to IPFS..')
+      await Store(task.name, path)
+    } catch (e) {
+      console.error('Unable to save to IPFS', e)
+    }
   }
 }
 start()
