@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Text, Card, CardBody, CardHeader, Button } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Text, Card, CardBody, CardHeader, Button, IconButton } from '@chakra-ui/react'
 import { Player } from '@livepeer/react'
 import { HeadingComponent } from 'components/layout/HeadingComponent'
 import dayjs from 'dayjs'
@@ -10,7 +10,7 @@ import { useAccount, useEnsAvatar, useEnsName } from 'wagmi'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import duration from 'dayjs/plugin/duration'
 import makeBlockie from 'ethereum-blockies-base64'
-import { ViewIcon, TimeIcon, ExternalLinkIcon } from '@chakra-ui/icons'
+import { ViewIcon, TimeIcon, ExternalLinkIcon, DownloadIcon } from '@chakra-ui/icons'
 import { LinkComponent } from 'components/layout/LinkComponent'
 import { NextSeo, VideoJsonLd } from 'next-seo'
 import { SITE_DESCRIPTION, SITE_NAME, SOCIAL_TWITTER } from 'utils/config'
@@ -45,7 +45,7 @@ export default function Index(props: Props) {
           title={props.video.name}
           playbackId={props.video.playbackId}
           objectFit="cover"
-          viewerId={creator}
+          viewerId={account.address ?? 'unknown'}
           priority
           showTitle={false}
           autoUrlUpload={{ fallback: true }}
@@ -57,12 +57,17 @@ export default function Index(props: Props) {
             <HeadingComponent as="h2" size="lg">
               {props.video.name}
             </HeadingComponent>
-            <LinkComponent
-              href={`https://twitter.com/intent/tweet?url=${window?.location?.href}%0A%0A&text=${props.video.name} 📸%0A%0A&hashtags=archivooor`}>
-              <Button leftIcon={<ExternalLinkIcon />} colorScheme="teal" variant="solid">
-                Share
-              </Button>
-            </LinkComponent>
+            <Flex gap={2}>
+              <LinkComponent href={props.video.downloadUrl}>
+                <IconButton variant="ghost" icon={<DownloadIcon />} aria-label="Download" />
+              </LinkComponent>
+              <LinkComponent
+                href={`https://twitter.com/intent/tweet?url=${window?.location?.href}%0A%0A&text=${props.video.name} 📸%0A%0A&hashtags=archivooor`}>
+                <Button leftIcon={<ExternalLinkIcon />} colorScheme="teal" variant="solid">
+                  Share
+                </Button>
+              </LinkComponent>
+            </Flex>
           </Flex>
           {ensAvatar.data ||
             (creator && (

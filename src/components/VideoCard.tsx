@@ -39,9 +39,6 @@ export function VideoCard(props: Props) {
               Details
             </Button>
           </LinkComponent>
-          <LinkComponent href={props.video.downloadUrl}>
-            <IconButton variant="ghost" size="sm" icon={<DownloadIcon />} aria-label="Download" />
-          </LinkComponent>
 
           <Flex gap={2} alignItems="center">
             <ViewIcon />

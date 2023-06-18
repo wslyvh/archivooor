@@ -28,8 +28,7 @@ export async function uploadAsset(video: Video) {
         storage: {
           ipfs: true,
           metadata: {
-            name: video.name,
-            description: video.description,
+            ...video,
           },
         },
       },
