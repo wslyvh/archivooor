@@ -1,14 +1,13 @@
 import { join } from 'path'
 import { existsSync, readFileSync, readdirSync } from 'fs'
 import { uploadAsset } from 'utils/livepeer'
-import { Video } from 'types'
 import dotenv from 'dotenv'
 import ffmpegPath from 'ffmpeg-static'
 import { SendCreatorNotification } from 'utils/push'
 import { Redeploy } from 'utils/vercel'
 import { SITE_URL } from 'utils/config'
 import { GetSlug } from 'utils/format'
-import { Store } from 'utils/storage'
+import { Pin, Store } from 'utils/storage'
 const execSync = require('child_process').execSync
 
 dotenv.config()
@@ -58,6 +57,9 @@ const start = async () => {
     try {
       console.log('Save to IPFS..')
       await Store(task.name, path)
+
+      // Disabled as Pinning API is not available, unfortunately :(
+      // await Pin(task.name, upload[0].storage?.ipfs?.cid)
     } catch (e) {
       console.error('Unable to save to IPFS', e)
     }
