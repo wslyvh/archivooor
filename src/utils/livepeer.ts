@@ -3,6 +3,9 @@ import { createReadStream } from 'fs'
 import { Asset, Video } from 'types'
 import { Asset as LPAsset } from '@livepeer/react'
 import { GetSlug } from './format'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 if (!process.env.NEXT_PUBLIC_LIVEPEER_API_KEY) {
   console.error('process.env.NEXT_PUBLIC_LIVEPEER_API_KEY is not defined')
@@ -11,7 +14,7 @@ if (!process.env.NEXT_PUBLIC_LIVEPEER_API_KEY) {
 export const IGNORE_FILTER = ['ignore', 'test']
 export const STREAM_DURATION = 3600
 
-export async function uploadAsset(video: Video) {
+export async function uploadAsset(video: Video, path: string) {
   const { provider } = createClient({
     provider: studioProvider({
       apiKey: process.env.NEXT_PUBLIC_LIVEPEER_API_KEY ?? '',
@@ -19,7 +22,7 @@ export async function uploadAsset(video: Video) {
   })
 
   console.log('Uploading asset..')
-  const stream = createReadStream(video.videoUrl)
+  const stream = createReadStream(path)
   const asset = await provider.createAsset({
     sources: [
       {
@@ -97,10 +100,10 @@ export async function getAssets(manage?: boolean): Promise<Asset[]> {
         const data = await res.json()
         if (data.errors) {
           console.error(data.errors)
-          return toAsset(i)
+          return await toAsset(i)
         }
 
-        return toAsset(i, data?.viewCount, data?.playtimeMins)
+        return await toAsset(i, data?.viewCount, data?.playtimeMins)
       }) as Asset[]
   )
 
@@ -111,18 +114,32 @@ export async function getAssets(manage?: boolean): Promise<Asset[]> {
   }
 }
 
-function toAsset(asset: LPAsset, viewCount: number = 0, playtimeMins: number = 0) {
-  return {
+async function toAsset(asset: LPAsset, viewCount: number = 0, playtimeMins: number = 0) {
+  let video: Asset = {
     id: asset.id,
     slug: GetSlug(asset.name),
     name: asset.name,
-    createdAt: asset.createdAt,
-    duration: asset.videoSpec?.duration,
-    playbackId: asset.playbackId,
-    playbackUrl: asset.playbackUrl,
-    downloadUrl: asset.downloadUrl,
+    createdAt: asset.createdAt ?? 0,
+    duration: asset.videoSpec?.duration ?? 0,
+    playbackId: asset.playbackId ?? '',
+    playbackUrl: asset.playbackUrl ?? '',
+    downloadUrl: asset.downloadUrl ?? '',
     cid: asset.storage?.ipfs?.cid ?? '',
     viewCount: viewCount,
     playtimeMins: playtimeMins,
-  } as Asset
+  }
+
+  if (asset.storage?.ipfs?.nftMetadata?.gatewayUrl) {
+    console.log('Fetching Metadata', asset.id)
+    const res = await fetch(asset.storage.ipfs.nftMetadata.gatewayUrl)
+    const metadata = await res.json()
+
+    if (metadata?.description) video.description = metadata.description
+    if (metadata?.creator) video.creator = metadata.creator
+    if (metadata?.start) video.start = metadata.start
+    if (metadata?.end) video.end = metadata.end
+    if (metadata?.videoUrl) video.videoUrl = metadata.videoUrl
+  }
+
+  return video
 }

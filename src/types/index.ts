@@ -25,8 +25,12 @@ export interface Asset {
   slug: string
   name: string
   description?: string
+  creator?: string
   createdAt: number
   duration: number
+  start?: number
+  end?: number
+  videoUrl?: string
   playbackId: string
   playbackUrl: string
   downloadUrl: string

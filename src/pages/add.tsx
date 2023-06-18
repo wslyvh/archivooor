@@ -3,15 +3,12 @@ import { Player } from '@livepeer/react'
 import { HeadingComponent } from 'components/layout/HeadingComponent'
 import dayjs from 'dayjs'
 import { GetStaticProps } from 'next'
-import duration from 'dayjs/plugin/duration'
 import { useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
 import { Asset, Message, Video } from 'types'
 import { getAssets } from 'utils/livepeer'
 import { Subscribe } from 'utils/push'
 import { Seo } from 'components/layout/Seo'
-
-dayjs.extend(duration)
 
 interface Props {
   assets: Asset[]

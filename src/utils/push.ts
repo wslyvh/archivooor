@@ -43,7 +43,7 @@ export async function GetNotifications(address: string) {
     })
 }
 
-export async function SendCreatorNotification(title: string, description: string, recipient?: string) {
+export async function SendCreatorNotification(title: string, description: string, recipient?: string, cta?: string) {
   if (process.env.DEPLOYER_KEY === undefined) {
     console.error('DEPLOYER_KEY not set')
   }
@@ -60,7 +60,7 @@ export async function SendCreatorNotification(title: string, description: string
     payload: {
       title: title,
       body: description,
-      cta: 'https://archivooor.vercel.app/',
+      cta: cta ?? 'https://archivooor.vercel.app/',
       img: '',
     },
     recipients: recipient ? `${ADDRESS_CAIP}${recipient}` : '', // recipient address

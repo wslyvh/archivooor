@@ -6,6 +6,8 @@ import dotenv from 'dotenv'
 import ffmpegPath from 'ffmpeg-static'
 import { SendCreatorNotification } from 'utils/push'
 import { Redeploy } from 'utils/vercel'
+import { SITE_URL } from 'utils/config'
+import { GetSlug } from 'utils/format'
 const execSync = require('child_process').execSync
 
 dotenv.config()
@@ -33,16 +35,15 @@ const start = async () => {
 
   if (result && existsSync(path)) {
     console.log('Uploading..')
-    const upload = await uploadAsset({
-      ...task,
-      videoUrl: path,
-    } as Video)
+    const upload = await uploadAsset(task, path)
     console.log('Completed', upload)
 
     console.log('Redeploying Application..')
     await Redeploy()
     console.log('Sending Push notification..')
-    await SendCreatorNotification('New video', 'A new video is available on Archivooor!')
+    const url = `${SITE_URL}/video/${GetSlug(task.name)}`
+    await SendCreatorNotification('New video', 'A new video is available on Archivooor. Watch it now!')
+    await SendCreatorNotification('Video ready', 'Your video is ready on Archivooor!', task.creator, url)
   }
 }
 start()

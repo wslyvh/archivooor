@@ -94,12 +94,23 @@ export default function Index(props: Props) {
                 <Text fontSize="sm">{Math.round(props.video.playtimeMins * 100) / 100} mins played</Text>
               </Flex>
             </Flex>
+            {props.video.cid && (
+              <Box mt={2}>
+                <LinkComponent href={`ipfs://${props.video.cid}`}>ipfs://{props.video.cid}</LinkComponent>
+              </Box>
+            )}
           </CardHeader>
-          {props.video.description && (
-            <CardBody>
-              <Text>{props.video.description}</Text>
-            </CardBody>
-          )}
+          <CardBody>
+            {props.video.description && <Text>{props.video.description}</Text>}
+
+            {props.video.videoUrl && (
+              <Box mt={8}>
+                <LinkComponent href={props.video.videoUrl}>
+                  &raquo; Original video ({dayjs.duration(props.video.start ?? 0, 'second').format('HH:mm:ss')})
+                </LinkComponent>
+              </Box>
+            )}
+          </CardBody>
         </Card>
       </main>
     </>

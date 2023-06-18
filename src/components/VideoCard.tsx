@@ -28,7 +28,6 @@ export function VideoCard(props: Props) {
           <LinkComponent href={`/video/${props.video.slug}`}>
             <Heading size="md">{props.video.name}</Heading>
           </LinkComponent>
-          {props.video.description && <Text>{props.video.description}</Text>}
         </Stack>
       </CardBody>
       <Divider />
