@@ -11,7 +11,7 @@ if (!process.env.NEXT_PUBLIC_LIVEPEER_API_KEY) {
   console.error('process.env.NEXT_PUBLIC_LIVEPEER_API_KEY is not defined')
 }
 
-export const IGNORE_FILTER = ['ignore', 'test']
+export const IGNORE_FILTER = ['ignore']
 export const STREAM_DURATION = 3600
 
 export async function uploadAsset(video: Video, path: string) {
